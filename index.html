@@ -1,0 +1,90 @@
+<!doctype html><html lang=en><head><meta charset=utf-8><meta name=viewport content="width=device-width,initial-scale=1">
+<title>Call fixes: a TV, half-finished sentences, and a word after goodbye</title><style>
+:root{--bg:#fbfaf7;--ink:#17181a;--mute:#5d6166;--line:#e4e1da;--ok:#1f7a4d;--bad:#a8322b;--card:#fff;--his:#2f6db5;--tv:#c0841a;--mia:#7a55b3;--busy:#8d9196}
+@media (prefers-color-scheme:dark){:root{--bg:#151617;--ink:#ecebe7;--mute:#a4a7ab;--line:#2c2e31;--ok:#5cc28d;--bad:#ef7d74;--card:#1d1f21;--his:#7fb0ef;--tv:#e7b04d;--mia:#b69ae6;--busy:#6d7176}}
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.55 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif}
+main{max-width:900px;margin:0 auto;padding:28px 16px 60px} h1{font-size:26px;margin:0 0 6px;line-height:1.25} h2{font-size:20px;margin:36px 0 8px}
+.sub{color:var(--mute)} .card{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:14px 16px;margin:12px 0}
+table{border-collapse:collapse;width:100%;font-size:14px} td,th{border-bottom:1px solid var(--line);padding:6px 8px;text-align:left;vertical-align:top}
+.big{font-size:30px;font-weight:700;line-height:1.1} .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:10px}
+.ok{color:var(--ok);font-weight:600} .bad{color:var(--bad);font-weight:600} code{font-size:13px} .scroll{overflow-x:auto}
+svg{width:100%;min-width:640px;height:auto} .his{fill:var(--his)} .tv{fill:var(--tv)} .mia{fill:var(--mia)} .busy{fill:var(--busy)}
+.tick{stroke:var(--line)} .lab,.row{fill:var(--mute);font-size:12px} .hand-b{stroke:var(--bad);stroke-width:2.5} .hand-a{stroke:var(--ok);stroke-width:2.5}
+.lab-b{fill:var(--bad);font-size:12px;font-weight:600} .lab-a{fill:var(--ok);font-size:12px;font-weight:600}
+.key span{display:inline-block;width:12px;height:12px;border-radius:2px;margin:0 4px -1px 10px} q{font-style:italic}
+</style></head><body><main>
+<h1>Call fixes from the Replogle call of Nov 19 (8:57 PM ET, 15 min, in French)</h1>
+<p class=sub>Three software fixes, mechanical only: nothing Mia says, asks or knows changes. Each one is replayed here on this call's
+own recording and on a real LiveKit agent session. Zero voice cost; no shopper was contacted. Branch <code>h308-call-turn-taking</code> at <code>6d62dc7d</code>.</p>
+
+<h2>1. The TV kept the shopper's turn open</h2>
+<div class=card>
+<p>He finished his questions at <b>5:22</b> (<q>Et quel est le prix de ce globe</q>). His wife had turned the TV up (he said so at 4:41).
+The TV kept the line busy and two of its lines went in as his words, so his turn never ended. At <b>5:55</b> he said
+<q>Excuse mon chatbot, il pensait encore que j'étais en train de parler.</q> Mia answered at <b>6:04</b>:
+<b>42 seconds</b> of silence after his question.</p>
+<p>On the recording his voice sits around <b>-22.6 dB</b>; the TV's lines sit around <b>-45 dB</b>, more than 20 dB quieter.
+The fix learns his speaking level and treats anything 15 dB quieter than him as background: those words never become his turn,
+never cut Mia off and never count toward his code, and the voice detector hears that stretch as quiet.</p>
+<div class=grid>
+<div class=card><div class=sub>Before: his turn ends</div><div class="big bad">5:54</div><div class=sub>32 s after his question (then he spoke over Mia's reply; she answered at 6:04)</div></div>
+<div class=card><div class=sub>After: his turn ends</div><div class="big ok">5:27</div><div class=sub>at the latest, 5 s after his last word; Mia then answers at her usual speed</div></div>
+<div class=card><div class=sub>TV words kept out</div><div class=big>27</div><div class=sub>of 1170 words heard on the whole call; none of them his</div></div>
+</div>
+<div class=scroll><svg viewBox="0 0 840 222" role="img" aria-label="Timeline from 4:58 to 6:10: the shopper's question, the TV, the voice detector before and after, and when Mia gets the turn">
+<line class="tick" x1="104.6" x2="104.6" y1="20" y2="196"/><text class="lab" x="104.6" y="212" text-anchor="middle">5:00</text><line class="tick" x1="207.3" x2="207.3" y1="20" y2="196"/><text class="lab" x="207.3" y="212" text-anchor="middle">5:10</text><line class="tick" x1="310.1" x2="310.1" y1="20" y2="196"/><text class="lab" x="310.1" y="212" text-anchor="middle">5:20</text><line class="tick" x1="412.9" x2="412.9" y1="20" y2="196"/><text class="lab" x="412.9" y="212" text-anchor="middle">5:30</text><line class="tick" x1="515.7" x2="515.7" y1="20" y2="196"/><text class="lab" x="515.7" y="212" text-anchor="middle">5:40</text><line class="tick" x1="618.4" x2="618.4" y1="20" y2="196"/><text class="lab" x="618.4" y="212" text-anchor="middle">5:50</text><line class="tick" x1="721.2" x2="721.2" y1="20" y2="196"/><text class="lab" x="721.2" y="212" text-anchor="middle">6:00</text><line class="tick" x1="824.0" x2="824.0" y1="20" y2="196"/><text class="lab" x="824.0" y="212" text-anchor="middle">6:10</text>
+<text class="row" x="0" y="34">Shopper</text><rect class="his" x="104.6" y="22" width="39.400000000000006" height="14" rx="2"/><rect class="his" x="148.9" y="22" width="19.69999999999999" height="14" rx="2"/><rect class="his" x="176.0" y="22" width="21.400000000000006" height="14" rx="2"/><rect class="his" x="204.5" y="22" width="24.599999999999994" height="14" rx="2"/><rect class="his" x="239.1" y="22" width="18.900000000000006" height="14" rx="2"/><rect class="his" x="266.0" y="22" width="44.39999999999998" height="14" rx="2"/><rect class="his" x="317.9" y="22" width="16.5" height="14" rx="2"/><rect class="his" x="673.3" y="22" width="28.0" height="14" rx="2"/>
+<text class="row" x="0" y="58">TV</text><rect class="tv" x="420.7" y="46" width="20.600000000000023" height="14" rx="2"/><rect class="tv" x="546.0" y="46" width="18.100000000000023" height="14" rx="2"/>
+<text class="row" x="0" y="82">Mia</text><rect class="mia" x="763.2" y="70" width="60.799999999999955" height="14" rx="2"/>
+<text class="row" x="0" y="118">Busy, before</text><rect class="busy" x="99.0" y="106" width="243.39999999999998" height="14" rx="2"/><rect class="busy" x="372.9" y="106" width="14.200000000000045" height="14" rx="2"/><rect class="busy" x="398.6" y="106" width="25.299999999999955" height="14" rx="2"/><rect class="busy" x="439.7" y="106" width="12.100000000000023" height="14" rx="2"/><rect class="busy" x="466.9" y="106" width="153.70000000000005" height="14" rx="2"/><rect class="busy" x="677.1" y="106" width="31.0" height="14" rx="2"/>
+<line class="hand-b" x1="661.7" x2="661.7" y1="100" y2="128"/><text class="lab-b" x="665.7" y="97">turn ends 5:54</text>
+<text class="row" x="0" y="168">Busy, after</text><rect class="busy" x="267.0" y="156" width="75.39999999999998" height="14" rx="2"/><rect class="busy" x="679.5" y="156" width="28.600000000000023" height="14" rx="2"/>
+<line class="hand-a" x1="383.5" x2="383.5" y1="150" y2="178"/><text class="lab-a" x="387.5" y="147">turn ends 5:27 at the latest</text>
+</svg></div>
+<p class="sub key"><span style="background:var(--his)"></span>shopper's words <span style="background:var(--tv)"></span>TV words
+<span style="background:var(--mia)"></span>Mia <span style="background:var(--busy)"></span>voice detector says "someone is talking"</p>
+<table><tr><th>When</th><th>What the TV said (kept out of his words)</th><th>Level</th></tr>
+<tr><td>5:30</td><td>troisième personne dans leur vie, puis qui va venir</td><td>-45.2 dB</td></tr><tr><td>5:42</td><td>fait plaisir, remarquez dans un deuil.</td><td>-44.4 dB</td></tr><tr><td>6:59</td><td>Il s&#x27;attend à avoir une question bien-sûr. Est-ce que c&#x27;est comme ça</td><td>-46.6 dB</td></tr>
+</table>
+<p class=sub>The 6:59 line is the TV too: in the real call it reached Mia as his words (<q>...Est-ce que c'est comme</q>) and she said
+<q>votre question s'est coupée après « est-ce que c'est comme »</q> at 7:12. With the fix it never reaches her.</p>
+<p class=sub>Checks on the whole call: his quietest piece was -28.5 dB, the TV's loudest -43.7 dB, the line between them -37.6 dB.
+The quieter voice detector never adds a pause inside his own speech (0 new pauses). Safety net for loud noise with no words
+(music near the phone): if the line stays busy 6 s after his last word, his turn ends and Mia answers what she heard.</p>
+</div>
+
+<h2>2. Mia jumped in on half-finished sentences</h2>
+<div class=card>
+<p>At 7:58, 8:28 and 9:20 she said <q>Je vous écoute, allez-y.</q> as soon as he paused mid-sentence, and twice she answered a
+fragment with a new question. Now a turn that stops mid-sentence (a trailing comma, or a last word like <q>et</q>, <q>donc</q>,
+<q>and</q>, <q>because</q>) waits up to 3 more seconds for him to go on. If he does, his pieces get one answer.</p>
+<table><tr><th>Real LiveKit session, his real pieces and pauses</th><th>Before</th><th>After</th></tr>
+<tr><td><ol style="margin:0;padding-left:18px"><li>là où Ce qui me retient le plus de commander ce globe aujourd&#x27;hui,</li><li>et le prix de ce globe,</li><li>est également ce qui me retient le plus</li></ol></td><td class=bad>3 answers, one per piece</td>
+<td class=ok>1 answer, after his last piece, with all three in front of her; all three still count as his words</td></tr>
+<tr><td>A finished sentence (<q>Je n'ai rien d'autre à ajouter sur ce point, j'ai tout dit.</q>)</td><td>answered at 0.0 s</td><td class=ok>answered at 0.0 s (no slower)</td></tr>
+<tr><td>He stops on <q>Donc</q> and says nothing more</td><td>answered at once</td><td class=ok>answered 3.03 s later (never left hanging)</td></tr>
+</table>
+<p class=sub>Of his 34 turns in Mia's log, 11 would wait for the rest; the other 23 are answered exactly as before:</p>
+<ul class=sub style="font-size:14px"><li>Et j&#x27;aime également la mythologie grecque et le Atlas qui tient le globe,</li><li>troisième personne dans leur vie, puis qui va venir C&#x27;est quand ce</li><li>La passion des choses bien faites, l&#x27;effort. La constance,</li><li>la prise en charge,</li><li>le destin,</li><li>Également,</li><li>la fidélité, la loyauté envers les autres et ceux qui nous ont donné la tâche de faire les choses. Il se peut avoir une question bien sûr. Est-ce que c&#x27;est comme</li><li>là où Ce qui me retient le plus de commander ce globe aujourd&#x27;hui,</li><li>et le prix de ce globe,</li><li>Donc</li><li>modifier et</li></ul>
+</div>
+
+<h2>3. Mia spoke after her goodbye</h2>
+<div class=card>
+<p>At 14:12 she closed: <q>pour tout ce que vous m&#x27;avez partagé, votre code s&#x27;affiche à l&#x27;écran. Au revoir!</q> At 14:26 she spoke again: <q>Votre code est maintenant à l&#x27;écran. Si vous avez d&#x27;autres questions sur le globe Atlas, je suis là.</q>
+Her closing answer had also asked for a tool (the word-count check), and LiveKit spoke the tool's follow-up after the goodbye;
+the old guard tried to stop it but was refused because the closing line can't be interrupted. Now anything after the goodbye is stopped by force.</p>
+<table><tr><th>Real LiveKit session, the call's real lines</th><th>What Mia says</th></tr>
+<tr><td>Before</td><td class=bad>Très pratique : l&#x27;IA pour cibler les prix, puis comparer le total avec les frais. Merci beaucoup pour tout ce que vous m&#x27;avez partagé, votre code s&#x27;affiche à l&#x27;écran. Au revoir!<br>Votre code est maintenant à l&#x27;écran. Si vous avez d&#x27;autres questions sur le globe Atlas, je suis là.</td></tr>
+<tr><td>After</td><td class=ok>Très pratique : l&#x27;IA pour cibler les prix, puis comparer le total avec les frais. Merci beaucoup pour tout ce que vous m&#x27;avez partagé, votre code s&#x27;affiche à l&#x27;écran. Au revoir!</td></tr></table>
+</div>
+
+<h2>How this was checked</h2>
+<div class=card><ul>
+<li>The call's recording with Mia's lines silenced (what the agent hears) went through the same speech-to-text the live agent uses
+(Deepgram nova-3, French, speaker labels), a few cents; then everything else ran offline: the branch's level guard, H283's voice guard,
+and LiveKit's own voice detector (Silero) before and after.</li>
+<li>Fixes 2 and 3 ran on a real LiveKit Agents 1.5.9 session with a stand-in model; his turns went through LiveKit's own end-of-turn path.</li>
+<li>Every agent test passes: H308's own, H134, H135, H283, H292, H293 and agent-livekit's tests.</li>
+<li>Nothing is deployed. The live agent changes only after Emile's go.</li>
+</ul></div>
+</main></body></html>
